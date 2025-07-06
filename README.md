@@ -16,7 +16,7 @@ Let’s explore this vibrant, cohesive, and immersive system design:
 
 🔥 **Alacritty**, the GPU-accelerated terminal emulator, paired with `fastfetch` and themed in warm Gruvbox hues, gives you speed and style in one.
 
-![Alacritty Gruvbox](https://github.com/IAmahin/dwm-gruvbox/blob/main/alacritty_full.png)
+![Alacritty Gruvbox](https://github.com/IAmahin/dwm-gruvbox/blob/main/Screenshot/alacritty_full.png)
 
 ---
 
