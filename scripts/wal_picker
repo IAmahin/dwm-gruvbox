@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# rofi-wallpaper-picker  — choose a wallpaper via Rofi and set it with feh
+
+# Directory that holds your wallpapers
+WALL_DIR="/home/i/.config/walpapers"
+
+# Make sure the directory exists
+if [[ ! -d $WALL_DIR ]]; then
+    notify-send "Wallpaper picker" "Directory $WALL_DIR not found!"
+    exit 1
+fi
+
+# Ask Rofi to show the list of image files (case‑insensitive glob)
+CHOICE=$(find "$WALL_DIR" -maxdepth 1 -type f \( \
+            -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \
+          \) -printf '%f\n' | sort | \
+          rofi -dmenu -i -p "Select Wallpaper  :")
+
+# If nothing chosen, quit quietly
+[[ -z $CHOICE ]] && exit 0
+
+# Apply the wallpaper; --bg-fill keeps aspect‑ratio and centres/crops as needed
+feh --bg-fill  "$WALL_DIR/$CHOICE"
+
+# feh automatically updates ~/.fehbg, so the wallpaper persists across sessions
+

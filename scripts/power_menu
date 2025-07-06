@@ -1,0 +1,82 @@
+# mahin
+
+#!/usr/bin/env bash
+# powermenu — Rofi Power Menu for dwm
+# Icons:   󰤄 󰗽 󰹑 󰝳 󰱱   (requires Nerd Font)
+
+# -------- Configuration --------
+rofi_theme='window { width: 480px; }'
+prompt='Power:'
+
+# -------- Functions --------
+
+logout_cmd() {
+    case $XDG_CURRENT_DESKTOP in
+        dwm|Dwm) pkill -USR1 dwm 2>/dev/null || pkill dwm ;;
+        *)       loginctl terminate-user "$USER"         ;;
+    esac
+}
+
+screen_saver() {
+    alacritty -e unimatrix &
+    sleep 0.5
+    xdotool key super+b
+}
+
+reset_dwm() {
+    # Open alacritty and run all rebuild steps inside
+    alacritty -e bash -c '
+        set -e
+        notify_send() { notify-send "󰝳 Reset DWM" "$1"; }
+
+        # DWM rebuild
+        cd ~/.config/dwm || { notify_send "Failed to cd to ~/.config/dwm"; exit 1; }
+        sudo rm -f config.h || { notify_send "Failed to remove config.h in dwm"; exit 1; }
+        sudo make clean install || { notify_send "dwm build failed"; exit 1; }
+
+        # SLSTATUS rebuild
+        cd ~/.config/slstatus || { notify_send "Failed to cd to ~/.config/slstatus"; exit 1; }
+        sudo rm -f config.h || { notify_send "Failed to remove config.h in slstatus"; exit 1; }
+        sudo make clean install || { notify_send "slstatus build failed"; exit 1; }
+
+        notify_send "dwm & slstatus rebuilt successfully"
+    ' &
+    alacritty_pid=$!
+    wait "$alacritty_pid"
+
+    # Log out after rebuild
+    logout_cmd
+}
+
+welcome_dunst() {
+    notify-send "󰱱 Welcome Sir" "Hope you're having a productive session!"
+}
+
+end_task_menu() {
+    task=$(ps -u "$USER" -o pid,comm --sort=comm | \
+           grep -vE "(rofi|powermenu|unimatrix|alacritty)" | \
+           rofi -dmenu -p "Kill Task " -theme-str "$rofi_theme")
+    [ -z "$task" ] && return
+    pid=$(awk '{print $1}' <<< "$task")
+    kill -9 "$pid" && notify-send "✅ Process Killed" "$task"
+}
+
+# -------- Main Menu --------
+
+options=$'   Shutdown\n   Restart\n 󰤄  Sleep\n 󰗽  Logout\n 󰹑  Screen Saver\n 󰝳  Reset DWM\n 󰱱  Welcome\n   End Task'
+
+choice=$(printf '%s\n' "$options" | \
+         rofi -dmenu -p "$prompt" -theme-str "$rofi_theme")
+
+case "$choice" in
+    *Shutdown)        systemctl poweroff   ;;
+    *Restart)         systemctl reboot     ;;
+    *Sleep)           systemctl suspend    ;;
+    *Logout)          logout_cmd           ;;
+    *"Screen Saver")  screen_saver         ;;
+    *"Reset DWM")     reset_dwm            ;;
+    *"Welcome")       welcome_dunst        ;;
+    *"End Task")      end_task_menu        ;;
+    *) exit 0 ;;  # Esc or no selection
+esac
+

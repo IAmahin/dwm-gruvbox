@@ -1,0 +1,50 @@
+# fzf fuzzy search on history with Ctrl+R
+__fzf_history__() {
+  local selected
+  selected=$(history | tac | fzf --tac +s --no-sort --reverse --prompt="History> ") && 
+  printf '%s\n' "$selected" | sed 's/ *[0-9]* *//'
+}
+
+bind '"\C-r": " \C-e$(__fzf_history__)\e\C-e"'
+
+# Go alias for navigation
+
+go () {
+  local choice
+
+  choice=$(
+    find . -mindepth 1 -print 2>/dev/null \
+    | sed 's|^\./||' \
+    | fzf \
+        --height=90% \
+        --layout=reverse \
+        --border \
+        --preview '
+          if [[ -d {} ]]; then
+            echo "📂 $(realpath -- {}):"
+            ls -A --color=always "{}" | head -100
+          else
+            # Only preview if file is text, else just print file type
+            if file --mime-type -b "{}" | grep -q text; then
+              bat --style=numbers --color=always --paging=never --quiet "{}"
+            else
+              echo "Binary or non-text file"
+            fi
+          fi
+        ' \
+        --preview-window=right:60%:wrap \
+        --bind 'tab:down,shift-tab:up'
+  ) || return
+
+  [[ -z $choice ]] && return
+
+  if [[ -d $choice ]]; then
+    cd "$choice"
+  elif file --mime "$choice" | grep -q text; then
+    helix "$choice"
+  else
+    echo "Not a text file — skipping open: $choice"
+  fi
+}
+
+
