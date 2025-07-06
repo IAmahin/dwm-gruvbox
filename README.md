@@ -59,17 +59,13 @@ A sleek and functional power menu that’s completely integrated into your Gruvb
 ![Power Menu](https://github.com/IAmahin/dwm-gruvbox/blob/main/Screenshot/power_menu.png)
 
 ---
-
-## 🔄 Workflow Overview — Fastfetch & Unimatrix
-
+## 🌱 Clean Startup — Minimal & Focused
 Terminal visuals meet efficiency. **Unimatrix** animation + `fastfetch` = aesthetic system info.
 
 ![Workflow](https://github.com/IAmahin/dwm-gruvbox/blob/main/Screenshot/full.png)
 
 ---
-
-## 🌱 Clean Startup — Minimal & Focused
-
+## 🔄 Workflow Overview — Fastfetch & Unimatrix
 Boot directly into clarity. Zero distractions, pure workflow. 🧘‍♂️
 
 ![Clean Start](https://github.com/IAmahin/dwm-gruvbox/blob/main/Screenshot/full2.png)
