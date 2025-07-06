@@ -1,0 +1,56 @@
+[global]
+    # Font
+    font = "Jetbrains Mono Nerd Font Bold 12"
+
+    # Right Position
+    origin = top-right
+
+    offset = (0,0)
+
+    # Frame width and spacing
+    frame_width = 1
+    separator_height = 2
+    padding = 10
+
+    # Transparency (0 = opaque, 1 = fully transparent)
+    transparency = 0
+
+    # Timeouts (ms)
+    timeout = 1000
+
+    # Geometry (can be adjusted as needed)
+    geometry = "300x5-10+40"
+
+    # Icons (if you want to use)
+    # icon_position = left
+    # icon_size = 32
+
+    # Text alignment
+    alignment = left
+
+    # Background and foreground colors (Gruvbox Dark)
+    background = "#282828"
+    foreground = "#ebdbb2"
+
+    # Frame color (border)
+    frame_color = "#458588"
+
+    # Separator color
+    separator_color = "#665c54"
+
+    # Urgent notification colors
+    [urgency_low]
+        background = "#282828"
+        foreground = "#a89984"
+        frame_color = "#689d6a"
+
+    [urgency_normal]
+        background = "#282828"
+        foreground = "#ebdbb2"
+        frame_color = "#458588"
+
+    [urgency_critical]
+        background = "#cc241d"
+        foreground = "#fbf1c7"
+        frame_color = "#fb4934"
+

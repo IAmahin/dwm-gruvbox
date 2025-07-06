@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Startpage</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #282828;
+      color: #ebdbb2;
+      font-family: "JetBrains Mono Nerd Font", monospace;
+      font-weight: bold;
+      font-size: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .welcome {
+      font-size: 50px;
+      color: #d65d0e; /* Gruvbox orange */
+      margin-bottom: 50px;
+    }
+
+    .container {
+      display: flex;
+      gap: 40px;
+    }
+
+    .shortcut {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      border: 2px solid transparent;
+      border-radius: 10px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s;
+      outline: none;
+    }
+
+    .shortcut:hover,
+    .shortcut:focus {
+      border-color: #83a598; /* Gruvbox blue */
+      background-color: #3c3836;
+    }
+
+    .icon {
+      font-size: 25px;
+    }
+
+    .label {
+      font-size: 25px;
+    }
+  </style>
+</head>
+<body>
+  <div class="welcome">Welcome, Mahin</div>
+
+  <div class="container">
+    <a class="shortcut" href="https://www.youtube.com" id="yt">
+      <div class="icon"> </div>
+      <div class="label">YouTube</div>
+    </a>
+    <a class="shortcut" href="https://chat.openai.com" id="cg">
+      <div class="icon">󰭹 </div>
+      <div class="label">ChatGPT</div>
+    </a>
+    <a class="shortcut" href="https://mail.google.com" id="gm">
+      <div class="icon">󰺻 </div>
+      <div class="label">Gmail</div>
+    </a>
+  </div>
+
+  <script>
+    // Focus first shortcut on page load
+    window.addEventListener('load', () => {
+      document.querySelector('.shortcut').focus();
+    });
+
+    // Keyboard arrow and hotkey navigation
+    document.addEventListener('keydown', e => {
+      const shortcuts = [...document.querySelectorAll('.shortcut')];
+      const index = shortcuts.indexOf(document.activeElement);
+
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        const delta = e.key === 'ArrowRight' ? 1 : -1;
+        const next = (index + delta + shortcuts.length) % shortcuts.length;
+        shortcuts[next].focus();
+      }
+
+      if (!e.ctrlKey && !e.altKey && !e.metaKey) {
+        switch (e.key.toLowerCase()) {
+          case 'y': document.getElementById('yt').click(); break;
+          case 'c': document.getElementById('cg').click(); break;
+          case 'g': document.getElementById('gm').click(); break;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
+
