@@ -1,0 +1,83 @@
+# ▗▄▄▖  ▗▄▖  ▗▄▄▖▗▖ ▗▖
+# ▐▌ ▐▌▐▌ ▐▌▐▌   ▐▌ ▐▌
+# ▐▛▀▚▖▐▛▀▜▌ ▝▀▚▖▐▛▀▜▌
+# ▐▙▄▞▘▐▌ ▐▌▗▄▄▞▘▐▌ ▐▌
+                    
+
+# Alias
+alias go='yazi'
+alias f='fastfetch'
+alias g='gedit'
+alias gi='sudo gedit'
+alias hi='sudo helix'
+alias h='helix'
+alias linutil='curl -fsSL https://christitus.com/linux | sh'
+alias off='shutdown now'
+alias c='clear'
+alias ls="eza -a --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
+alias gc='git clone'
+alias ins='sudo pacman -S'
+alias uins='sudo pacman -Rns'
+alias updt="sudo pacman -Syu"
+alias .='cd ..'
+alias ..='cd .. && cd ..'
+alias ...='cd .. && cd .. && cd ..'
+alias cbash='helix .bashrc'
+alias qq='source ~/.bashrc && fastfetch'
+
+
+# DWM Alias
+alias s='clear && startx'
+alias cstatus='cd .config/slstatus && helix config.def.h'
+alias restatus='cd && cd .config/slstatus && rm config.h && sudo make clean install'
+alias cdwm='cd .config/dwm && helix config.def.h'
+alias redwm='cd .config/dwm && sudo rm config.h && sudo make clean install && cd .. && cd ..'
+alias iii='sudo rm config.h && sudo make clean install'
+alias ii='sudo make clean install'
+
+# Zoxide 
+eval "$(zoxide init --cmd cd bash)"
+
+# Prompt
+
+PS1='\[\e[0;32m\]\u@\h\[\e[0m\]:\[\e[0;34m\]\w\[\e[0m\] \[\e[0;33m\]$(git branch 2>/dev/null | grep "^\*" | colrm 1 2)\[\e[0m\] \[$(
+  if [ -w "$PWD" ]; then
+    printf "\e[38;5;215m󰎚 \e[0m "
+  elif [ -r "$PWD" ]; then
+    printf "\e[38;5;215m󱞃 \e[0m "
+  fi
+)\]\[\e[0;33m\]\[\e[0m\] '                          
+
+
+
+# Case Sensitivity Off
+bind -f ~/.inputrc
+
+# --- FZF history picker -----------------------------------------------
+__fzf_history__() {
+  # Grab the chosen line (latest first, numbers stripped) ↓
+  local entry
+  entry=$(history | tac | fzf --tac +s --no-sort --reverse --prompt='History> ') || return
+  READLINE_LINE="${entry##*[0-9] }"       # put it on the command line
+  READLINE_POINT=${#READLINE_LINE}        # place cursor at the end
+}
+
+# --- Key‑binding -------------------------------------------------------
+# Most xterm‑compatible terminals send ESC [1;5A for Ctrl‑↑
+bind -x '"\e[1;5A":__fzf_history__'
+
+
+# Yazi
+
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+
+export EDITOR=helix
+
+
