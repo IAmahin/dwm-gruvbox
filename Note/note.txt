@@ -1,0 +1,20 @@
+Installed Application
+helix
+fuzzel
+alacritty
+zoxide
+eza
+thorium
+thunar
+fastfetch
+hyprland
+gvfs
+gedit
+nwg-look
+xarchiever
+eog
+vlc
+bat
+ripgrep
+fd
+sl
